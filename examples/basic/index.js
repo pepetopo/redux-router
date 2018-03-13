@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { createStore, compose, combineReducers } from 'redux';
 
@@ -15,11 +16,11 @@ import { devTools } from 'redux-devtools';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import { createHistory } from 'history';
 
-@connect((state) => ({}))
+@connect(state => ({}))
 class App extends Component {
   static propTypes = {
-    children: PropTypes.node
-  }
+    children: PropTypes.node,
+  };
 
   constructor(props) {
     super(props);
@@ -36,15 +37,27 @@ class App extends Component {
   render() {
     // Display is only used for rendering, its not a property of <Link>
     const links = [
-        { pathname: '/', display: '/'},
-        { pathname: '/parent', query: { foo: 'bar' }, display: '/parent?foo=bar'},
-        { pathname: '/parent/child', query: { bar: 'baz' }, display: '/parent/child?bar=baz'},
-        { pathname: '/parent/child/123', query: { baz: 'foo' }, display: '/parent/child/123?baz=foo'}
-    ].map((l, i) =>
+      { pathname: '/', display: '/' },
+      {
+        pathname: '/parent',
+        query: { foo: 'bar' },
+        display: '/parent?foo=bar',
+      },
+      {
+        pathname: '/parent/child',
+        query: { bar: 'baz' },
+        display: '/parent/child?bar=baz',
+      },
+      {
+        pathname: '/parent/child/123',
+        query: { baz: 'foo' },
+        display: '/parent/child/123?baz=foo',
+      },
+    ].map((l, i) => (
       <p key={i}>
         <Link to={l}>{l.display}</Link>
       </p>
-    );
+    ));
 
     return (
       <div>
@@ -62,8 +75,8 @@ class App extends Component {
 
 class Parent extends Component {
   static propTypes = {
-    children: PropTypes.node
-  }
+    children: PropTypes.node,
+  };
 
   render() {
     return (
@@ -77,7 +90,7 @@ class Parent extends Component {
 
 class Child extends Component {
   render() {
-    const { params: { id }} = this.props;
+    const { params: { id } } = this.props;
 
     return (
       <div>
@@ -89,13 +102,12 @@ class Child extends Component {
 }
 
 const reducer = combineReducers({
-  router: routerStateReducer
+  router: routerStateReducer,
 });
 
-const store = compose(
-  reduxReactRouter({ createHistory }),
-  devTools()
-)(createStore)(reducer);
+const store = compose(reduxReactRouter({ createHistory }), devTools())(
+  createStore
+)(reducer);
 
 class Root extends Component {
   render() {
